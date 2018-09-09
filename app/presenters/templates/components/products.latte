@@ -1,32 +1,35 @@
 <div class="container">
     {if count($products) === 0}
-        <h1 style="color: red; text-align: center">
-            Pro kombinaci nejsou žádné nabídky
-        </h1>
-    {/if}
-{foreach $products as $product}
-        {if $iterator->isFirst()}
-        <div class="row">
+    <h1 style="color: red; text-align: center">
+        Pro kombinaci nejsou žádné nabídky
+    </h1>
+    {else}
+    {foreach $products as $product}
+    {if $iterator->isFirst()}
+    <div class="row">
         {/if}
-            <div class="col-sm-12 col-md-4">
-                <h2>{$product->getName()}</h2>
-                <small>{$product->getCode()}</small>
-                <p>Cena: {$product->getWithDph()} Kč</p>
-                <a target="_blank" href="{$product->getLink()}">Detail</a>
-            </div>
+        <div class="col-sm-12 col-md-4">
+            <h2>{$product->getName()}</h2>
+            <small>{$product->getCode()}</small>
+            <p>Cena: {$product->getWithDph()} Kč</p>
+            <a target="_blank" href="{$product->getLink()}">Detail</a>
+        </div>
 
         {if $iterator->isLast()}
-        </div>
-        {/if}
+    </div>
+    {/if}
 
-        {if $iterator->getCounter() % 3 === 0}
-            </div>
-            <div class="row">
-        {/if}
-{/foreach}
+    {if $iterator->getCounter() % 3 === 0}
+    </div>
+    <div class="row">
+    {/if}
+    {/foreach}
+    <a n:href="export! product => $productName, brand => $brand">exportovat</a>
 </div>
 
 {if count($products) === 20}
-    <a n:if="$page !== 1" n:href="Homepage:default, product => $productName, brand => $brand, page => $page - 1">Předchozí strana</a>
+    <a n:if="$page !== 1" n:href="Homepage:default, product => $productName, brand => $brand, page => $page - 1">Předchozí
+        strana</a>
     <a n:href="Homepage:default, product => $productName, brand => $brand, page => $page + 1">Další strana</a>
+{/if}
 {/if}

@@ -42,6 +42,36 @@ class ProductService
     }
 
     /**
+     * @param $type
+     * @param $company
+     * @return array
+     */
+    public function productsToExport($type, $company)
+    {
+        $data = $this->crawler->getData($type, $company);
+
+        $result = [[
+            'Jménko',
+            'kód',
+            'cena s DPH',
+            'cena bez DPH',
+        ], []];
+
+        $size = count($data['links']);
+
+        for ($i = 0; $i < $size; $i++) {
+            $result[] = [
+                $data['names'][$i],
+                $data['codes'][$i],
+                $data['bezdph'][$i],
+                $data['sdph'][$i],
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
      * @param array $data
      * @param int $page
      * @return ProductEntity[]

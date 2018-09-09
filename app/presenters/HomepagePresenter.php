@@ -55,6 +55,29 @@ class HomepagePresenter extends BasePresenter
 	}
 
     /**
+     * Exports data to .csv
+     * @param $product
+     * @param $brand
+     * @throws \Nette\Application\AbortException
+     */
+	public function handleExport($product, $brand)
+    {
+            $products = $this->productService->productsToExport($product, $brand);
+
+            $this->getHttpResponse()->setHeader('Content-Type', 'text/csv; charset=utf-8');
+            $this->getHttpResponse()->setHeader('Content-Disposition', "attachment; filename=data.csv");
+
+
+            $out = fopen('php://output', 'w');
+            foreach ($products as $product) {
+                fputcsv($out, $product);
+            }
+            fclose($out);
+
+            $this->terminate();
+    }
+
+    /**
      * @param string $name
      * @return ProductForm|\Nette\ComponentModel\IComponent|null
      */
