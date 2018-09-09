@@ -1,0 +1,27 @@
+<div class="container">
+    {if count($products) === 0}
+        <h1 style="color: red; text-align: center">
+            Pro kombinaci nejsou žádné nabídky
+        </h1>
+    {/if}
+{foreach $products as $product}
+        {if $iterator->isFirst()}
+        <div class="row">
+        {/if}
+            <div class="col-sm-12 col-md-4">
+                <h2>{$product->getName()}</h2>
+                <small>{$product->getCode()}</small>
+                <p>Cena: {$product->getWithDph()} Kč</p>
+                <a target="_blank" href="{$product->getLink()}">Detail</a>
+            </div>
+
+        {if $iterator->isLast()}
+        </div>
+        {/if}
+
+        {if $iterator->getCounter() % 3 === 0}
+            </div>
+            <div class="row">
+        {/if}
+{/foreach}
+</div>
