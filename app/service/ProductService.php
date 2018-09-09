@@ -32,20 +32,23 @@ class ProductService
     /**
      * @param $type string
      * @param $company string
+     * @param int $page
      * @return ProductEntity[]
      */
-    public function getProducts($type, $company)
+    public function getProducts($type, $company, $page = 1)
     {
         $data = $this->crawler->getData($type, $company);
-        return $this->mapToEntities($data);
+        return $this->mapToEntities($data, $page);
     }
 
     /**
      * @param array $data
+     * @param int $page
      * @return ProductEntity[]
      */
-    private function mapToEntities(array $data)
+    private function mapToEntities(array $data, $page)
     {
+        $page--;
         /** @var ProductEntity[] $result */
         $result = [];
         $size = count($data['links']);
@@ -60,6 +63,21 @@ class ProductService
             );
 
             $result[] = $product;
+        }
+
+        if ($size > ($page * 20 + 20)) {
+            for ($i = 0; $i < $page * 20; $i++) {
+                unset($result[$i]);
+            }
+            for ($i = $page * 20 + 20; $i < $size; $i++) {
+                unset($result[$i]);
+            }
+        } else if ($size > $page * 20) {
+            for ($i = 0; $i < $page * 20; $i++) {
+                unset($result[$i]);
+            }
+        } else {
+            return [];
         }
 
         return $result;

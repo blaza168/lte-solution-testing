@@ -25,3 +25,8 @@
         {/if}
 {/foreach}
 </div>
+
+{if count($products) === 20}
+    <a n:if="$page !== 1" n:href="Homepage:default, product => $productName, brand => $brand, page => $page - 1">Předchozí strana</a>
+    <a n:href="Homepage:default, product => $productName, brand => $brand, page => $page + 1">Další strana</a>
+{/if}

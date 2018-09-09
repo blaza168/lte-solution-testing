@@ -24,12 +24,33 @@ class HomepagePresenter extends BasePresenter
     }
 
 
-    public function renderDefault()
+    /**
+     * TODO: parameter validation
+     * @param $product
+     * @param $brand
+     * @param $page
+     */
+    public function renderDefault($product, $brand, $page)
 	{
+	    if ($product) {
+            $this->template->products = $this->productService->getProducts($product, $brand, $page);
+	        $this->template->page = $page;
+            $this->template->brand = $brand;
+            $this->template->productName = $product;
+
+            $this['productForm']->setDefaults([
+               'product' => $product,
+               'brand' => $brand,
+            ]);
+        }
+
         if ($this['productForm']->isSubmitted() && $this['productForm']->isValid()) {
             $values = $this['productForm']->getValues();
 
             $this->template->products = $this->productService->getProducts($values->product, $values->brand);
+            $this->template->brand = $values->brand;
+            $this->template->page = 1;
+            $this->template->productName = $values->product;
         }
 	}
 
